@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFID OS v4.0 | Master Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">
+            <h1>🛰️ RFID OS v4.0</h1>
+            <p>Ваш персональний центр управління знаннями</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" id="createModuleBtn">
+                <span>+</span> Новий модуль
+            </button>
+            <button class="btn btn-export" id="exportAllBtn">
+                📤 Експорт всіх
+            </button>
+            <button class="btn btn-import" id="importBtn">
+                📥 Імпорт
+            </button>
+            <button class="btn btn-bulk" id="bulkModeBtn">
+                ⚡ Группові операції
+            </button>
+        </div>
+    </header>
+
+    <div class="search-section">
+        <input type="text" class="search-bar" id="search" placeholder="Пошук по назві, опису або тегах...">
+        
+        <div class="filters">
+            <select class="filter-select" id="categoryFilter">
+                <option value="">Всі категорії</option>
+                <option value="Промпти">Промпти</option>
+                <option value="Код">Код</option>
+                <option value="Маркетинг">Маркетинг</option>
+                <option value="Дизайн">Дизайн</option>
+                <option value="Аналітика">Аналітика</option>
+            </select>
+            
+            <select class="filter-select" id="statusFilter">
+                <option value="">Всі статуси</option>
+                <option value="active">Активний</option>
+                <option value="draft">Чернетка</option>
+                <option value="archived">Архівний</option>
+            </select>
+            
+            <select class="filter-select" id="sortBy">
+                <option value="name">Сортувати: За назвою</option>
+                <option value="createdAt">Сортувати: За датою створення</option>
+                <option value="updatedAt">Сортувати: За оновленням</option>
+                <option value="version">Сортувати: За версією</option>
+            </select>
+            
+            <select class="filter-select" id="sortOrder">
+                <option value="asc">↑ За зростанням</option>
+                <option value="desc">↓ За спаданням</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Panel -->
+    <div class="bulk-actions" id="bulkActions">
+        <div class="bulk-info">
+            <span id="selectedCount">0</span> модулів вибрано
+        </div>
+        <div class="bulk-buttons">
+            <button class="btn-sm" id="bulkExportBtn">📤 Експортувати вибрані</button>
+            <button class="btn-sm" id="bulkArchiveBtn">📁 Архівувати вибрані</button>
+            <button class="btn-sm btn-delete" id="bulkDeleteBtn">🗑️ Видалити вибрані</button>
+            <button class="btn-sm" id="clearSelectionBtn">✖️ Скасувати вибір</button>
+        </div>
+    </div>
+
+    <div class="grid" id="moduleGrid">
+        <!-- Cards will be rendered here -->
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal" id="moduleModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Додати новий модуль</h2>
+            <button class="close-modal" id="closeModuleModal">×</button>
+        </div>
+        
+        <form id="moduleForm">
+            <input type="hidden" id="moduleId">
+            <input type="hidden" id="filePath">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="name">Назва модуля *</label>
+                    <input type="text" id="name" placeholder="Наприклад: Архітектор ТЗ" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="icon">Іконка (емодзі)</label>
+                    <input type="text" id="icon" placeholder="🏗️" value="📄" maxlength="2">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="description">Опис модуля</label>
+                <textarea id="description" placeholder="Короткий опис призначення модуля..."></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="category">Категорія *</label>
+                    <select id="category" required>
+                        <option value="">Оберіть категорію</option>
+                        <option value="Промпти">Промпти</option>
+                        <option value="Код">Код</option>
+                        <option value="Маркетинг">Маркетинг</option>
+                        <option value="Дизайн">Дизайн</option>
+                        <option value="Аналітика">Аналітика</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="status">Статус *</label>
+                    <select id="status" required>
+                        <option value="active">Активний</option>
+                        <option value="draft">Чернетка</option>
+                        <option value="archived">Архівний</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="version">Версія *</label>
+                    <input type="text" id="version" placeholder="1.0.0" value="1.0.0" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="tags">Теги</label>
+                <input type="text" id="tags" placeholder="Введіть теги через кому">
+                <small class="text-muted">Наприклад: ТЗ, архітектура, система</small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="content">Контент (промпт/код) *</label>
+                <textarea id="content" rows="10" placeholder="Вставте текст промпту, код або інший контент тут..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="filePathInput">Шлях до файлу</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="filePathInput" placeholder="modules/my-module.json" style="flex: 1;">
+                    <button type="button" class="btn-sm" id="generateFilePathBtn">Авто</button>
+                </div>
+                <small class="text-muted">Залиште порожнім для автоматичного створення</small>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="submit" class="btn" id="submitBtn">Зберегти модуль</button>
+                <button type="button" class="btn-sm" id="cancelModuleBtn">Скасувати</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal" id="viewModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="viewTitle"></h2>
+            <button class="close-modal" id="closeViewModal">×</button>
+        </div>
+        
+        <div class="modal-body" id="viewContent"></div>
+        
+        <div class="modal-actions">
+            <button class="btn" id="copyContentBtn">
+                📋 Копіювати контент
+            </button>
+            <button class="btn btn-edit" id="editCurrentModuleBtn">
+                ✏️ Редагувати
+            </button>
+            <button class="btn-sm" id="closeViewBtn">
+                Закрити
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Подключаем библиотеки -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+
+<!-- Наши скрипты -->
+<script src="scripts/storage.js"></script>
+<script src="scripts/markdown.js"></script>
+<script src="scripts/tags.js"></script>
+<script src="scripts/app.js"></script>
+
+</body>
+</html>

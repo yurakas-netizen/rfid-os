@@ -1,0 +1,21 @@
+{
+  "id": 2,
+  "name": "Article Standard",
+  "icon": "✍️",
+  "description": "Золотий стандарт написання статей для блогу",
+  "category": "Маркетинг",
+  "status": "active",
+  "version": "3.1.0",
+  "tags": ["контент", "стаття", "блог", "маркетинг", "SEO"],
+  "content": "# Золотий стандарт статей RFID UKRAINE\n\n## 1. Структура HTML-документа\n\n```html\n<!DOCTYPE html>\n<html lang=\"uk\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Заголовок статті | RFID UKRAINE</title>\n</head>\n<body>\n    <main>\n        <article>\n            <!-- Контент статті -->\n        </article>\n    </main>\n</body>\n</html>\n```\n\n## 2. Обов'язкові блоки\n\n1. **E-E-A-T блок** (автор + дата)\n2. **Вступний абзац** (проблема + рішення)\n3. **Проблеми** (`.problems`)\n4. **Технологія** (`.technology`)\n5. **Міжнародні кейси** (мінімум 2)\n6. **Фінансовий розрахунок** (таблиця ROI)\n7. **План впровадження** (`.benefits`)\n8. **FAQ** (мінімум 3 питання)\n9. **Джерела** (`.info`)\n\n## 3. SEO вимоги\n\n- **Обсяг:** 8,000–10,000 знаків\n- **H1:** Проблемно-орієнтований\n- **Title:** Містить ключові слова + ROI\n- **Description:** 150-160 символів\n- **Slug:** Латиницею з дефісами",
+  "createdAt": "2024-02-01T11:20:00Z",
+  "updatedAt": "2024-03-25T16:30:00Z",
+  "history": [
+    {
+      "version": "3.0.0",
+      "content": "Попередня версія стандарту",
+      "updatedAt": "2024-03-10T13:20:00Z"
+    }
+  ],
+  "filePath": "modules/article-standard.json"
+}
