@@ -50,3 +50,14 @@ MIT License
 ---
 
 Built in a few hours on January 1, 2026 with the help of AI assistants 🚀
+## ☕ Support the project / Підтримати проєкт
+
+Якщо RFID OS допомагає тобі — купи мені каву! ☕❤️  
+Це мотивує розвивати проєкт далі.
+
+If RFID OS helps you — buy me a coffee! ☕❤️  
+It keeps me motivated to improve the project.
+
+[![Ko-fi](https://ko-fi.com/img/githubbtn_sm.svg)](https://ko-fi.com/yurakas)
+
+Дякую за підтримку! / Thanks for the support!
