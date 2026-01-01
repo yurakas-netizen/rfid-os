@@ -1,126 +1,168 @@
 # 🛰️ RFID OS v4.0 — Master Hub
 
-Your personal **offline** knowledge management system.  
-Built entirely on JSON files. Completely free. No servers. No subscription.
+**Offline knowledge & prompt management for people who actually work with LLMs.**  
+Built on plain JSON files.  
+100% offline. No servers. No accounts. No subscriptions.
 
-[live demo →](https://yurakas-netizen.github.io/rfid-os/)
+👉 [Live demo](https://yurakas-netizen.github.io/rfid-os/)  
+👉 [GitHub](https://github.com/yurakas-netizen/rfid-os)
 
-## 🚀 Features
+---
 
-- Fully offline (localStorage)
-- Markdown editor with live preview and code highlighting
-- Module versioning with history
-- Bulk operations (export/archive/delete selected)
-- Import/export single modules or entire database
-- Search, filters, sorting (including by version)
-- Tag autocomplete + popular tags suggestions
-- Dark theme, fully responsive
-- Keyboard shortcuts (Ctrl+N, Esc, Ctrl+F)
+## 🚀 Manifesto
 
-## Comparison with alternatives
+- **No server. No subscription. 100% offline.**
+- Your data is not “stored” — it lives in your files.
+- RFID OS exists because modern “productivity tools” forgot a simple idea:
 
-| Feature           | RFID OS       | Notion       | Obsidian     | Confluence   |
-|-------------------|---------------|--------------|--------------|--------------|
-| Offline           | ✅ Full        | ❌ No         | ✅ Yes        | ❌ No         |
-| Price             | ✅ Free        | 💰 $10/mo     | 💰 ~$8/mo     | 💰 $5+/mo     |
-| Data format       | ✅ JSON        | ❌ Database   | ✅ Markdown   | ❌ Database   |
-| Versioning        | ✅ Built-in    | ⚠️ Paid      | ✅ Git        | ⚠️ Paid      |
-| Customization     | ✅ Full        | ❌ Limited    | ⚠️ Plugins   | ❌ Limited    |
+> **Knowledge should belong to the person who creates it.**
 
-**Conclusion**: RFID OS beats paid tools at offline access and price — while staying completely open and free.
+---
 
-## ⚙️ How to use
+## ❌ What RFID OS is NOT
 
-1. Download ZIP or clone the repo
-2. Open `index.html` in any browser
+This is intentional:
 
-No installation. No build. Works instantly.
+- ❌ **Not a SaaS** — no cloud, no vendor lock‑in, no pricing page.  
+- ❌ **Not a team collaboration tool** — designed for solitaires, engineers, and experts.  
+- ❌ **Not an AI app** — no built‑in LLMs, no APIs, no tokens.  
+- ❌ **Not an enterprise platform** — no plugins, no bloated architecture.  
+- ❌ **Not a Notion clone** — only structured modules with versioning and history.  
 
-Live demo: https://yurakas-netizen.github.io/rfid-os/
+---
 
-## 📂 Structure
-├── index.html
-├── styles.css
-├── modules/          ← your JSON modules go here
-└── scripts/          ← core logic
+## 🚀 Core Features
+
+- ✅ Fully offline (localStorage + JSON)  
+- ✍️ Markdown editor with live preview & code highlighting  
+- 🕒 Module versioning with full history  
+- 📦 Bulk operations (export / archive / delete)  
+- 🔁 Import & export single modules or entire database  
+- 🔍 Search, filters, sorting (including by version)  
+- 🏷 Tag autocomplete + popular tag suggestions  
+- 🌙 Dark theme, fully responsive UI  
+- ⌨️ Keyboard shortcuts (Ctrl+N, Esc, Ctrl+F)  
+
+### 🤖 Smart Export (LLM‑first)
+
+Optimized for real LLM workflows, not marketing demos.  
+Supported export formats:
+
+- 🤖 ChatGPT (OpenAI)  
+- 👨‍💼 Claude (Anthropic)  
+- 🔷 Gemini (Google)  
+- 🧠 DeepSeek — **primary engineering workflow**  
+- 😎 Grok — aggressive refactor & architecture  
+- 👨‍💻 Copilot  
+- 🦙 Llama  
+- 🌬 Mistral  
+- 🔍 Perplexity  
+- 📊 JSONL (fine‑tuning)  
+- 📄 Universal Markdown  
+
+> DeepSeek and Grok are treated as first‑class citizens, because they handle large contexts, code, and system‑level thinking best in practice.
+
+---
+
+## 🆚 Comparison with Alternatives
+
+| Feature       | RFID OS | Notion | Obsidian | Confluence |
+|---------------|---------|--------|----------|------------|
+| **Offline**   | ✅ Full | ❌ No  | ✅ Yes   | ❌ No      |
+| **Price**     | ✅ Free | 💰 $10/mo | 💰 ~$8/mo | 💰 $5+/mo |
+| **Data format** | ✅ JSON | ❌ Database | ✅ Markdown | ❌ Database |
+| **Versioning** | ✅ Built‑in | ⚠️ Paid | ✅ Git | ⚠️ Paid |
+| **Customization** | ✅ Full | ❌ Limited | ⚠️ Plugins | ❌ Limited |
+
+**Conclusion:**  
+RFID OS beats paid tools where it matters most: **offline access, ownership of data, and zero cost.**
+
+---
+
+## ⚙️ How to Use
+
+1. Download ZIP or clone the repo  
+2. Open `index.html` in any browser  
+3. That’s it — no installation, no build step, works instantly  
+
+👉 [Live demo](https://yurakas-netizen.github.io/rfid-os/)
+
+---
+## 📂 Project Structure
+
+```text
+rfid-os/
+├── index.html        # entry point
+├── styles.css        # UI styles
+├── modules/          # your JSON modules
+└── scripts/          # core logic
+
+---
 
 ## 🤝 Contributing
 
-Want to help? Check out [CONTRIBUTING.md](CONTRIBUTING.md)
+PRs are welcome — if they respect the philosophy.  
+See `CONTRIBUTING.md`.
 
-## ☕ Support the project
+---
 
-If RFID OS saves you time — buy me a coffee! ☕❤️  
-It motivates me (and my monster friend 👹) to add new features faster.
+## ☕ Support the Project
 
-[![Support on Ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-ff5f5f?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/yurakas)
+If RFID OS saves you time — [![Support on Ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-ff5f5f?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/yurakas) ☕❤️  
+It motivates me (and my monster friend 👹) to ship faster.
 
-Thanks for the support!
+---
+
+## 🛰️ Built With
+
+Created in a few hours on **January 1, 2026**  
+By a human — with help from AI assistants 🚀
 
 ---
 
 ## 🇺🇦 Українська версія
 
-Built in a few hours on January 1, 2026 with the help of AI assistants 🚀
-# 🛰️ RFID OS v4.0 — Master Hub
+🛰️ RFID OS v4.0 — Master Hub  
+Персональний офлайн‑центр управління знаннями та промптами для роботи з LLM.  
+JSON‑файли. 100% офлайн. Без серверів. Без підписок.  
 
-Персональний офлайн-центр управління знаннями.  
-Повністю безкоштовно, без серверів, на JSON-файлах.
+👉 [Live demo](https://yurakas-netizen.github.io/rfid-os/)
 
-![Main screenshot](screenshots/main.png)
+### 🚀 Маніфест
+Жодних серверів. Жодних підписок. Повна автономність.  
+Ваші дані — це ваші файли.  
+RFID OS створено як відповідь на SaaS‑хаос і втрату контролю над власними знаннями.  
 
-## 🚀 Особливості
+### ❌ Чим RFID OS не є
+- SaaS‑платформа  
+- Інструмент для команд  
+- AI‑додаток  
+- Enterprise‑система  
+- Notion‑подібний нотатник  
 
-- Повністю офлайн (localStorage)
-- Версіонування модулів з історією
-- Групові операції (bulk)
-- Імпорт/експорт одного модуля чи всієї бази
-- Пошук, фільтри, сортування (включно по версії)
-- Автодоповнення тегів + популярні теги
-- Темна тема, адаптивний дизайн
-- Клавіатурні скорочення
+Це локальний інженерний інструмент.
 
-## Порівняння з аналогами
+### 🚀 Можливості
+- Повністю офлайн  
+- Markdown‑редактор з превʼю  
+- Версіонування з історією  
+- Масові операції  
+- Імпорт / експорт  
+- Пошук і фільтри  
+- Теги  
+- Темна тема  
+- Гарячі клавіші  
 
-| Фіча              | RFID OS       | Notion       | Obsidian     | Confluence   |
-|-------------------|---------------|--------------|--------------|--------------|
-| Офлайн            | ✅ Повний      | ❌ Ні         | ✅ Так        | ❌ Ні         |
-| Ціна              | ✅ Безкоштовно | 💰 $10/міс    | 💰 ~$8/міс    | 💰 $5+/міс    |
-| Формат даних      | ✅ JSON       | ❌ База даних | ✅ Markdown   | ❌ База даних |
-| Версіонування     | ✅ Вбудоване   | ⚠️ Платно    | ✅ Git        | ⚠️ Платно    |
-| Кастомізація      | ✅ Повна       | ❌ Обмежена   | ⚠️ Плагіни   | ❌ Обмежена   |
+### 🤖 Smart Export для LLM
+Оптимізовано під реальні робочі сценарії.  
+Фокус: **DeepSeek та Grok**.  
+Інші формати — для сумісності та міграції.  
 
-## ⚙️ Як запустити
+### ⚙️ Запуск
+1. Скачай або клонуй репозиторій  
+2. Відкрий `index.html` у браузері  
+3. Готово 🚀  
 
-1. Клонуй або скачай ZIP
-2. Відкрий `index.html` у браузері
-
-Готово. Жодних установок.
-
-## 📂 Структура
-├── index.html
-├── styles.css
-├── modules/          ← твої JSON-модулі
-└── scripts/
-## 🤝 Контриб’ютити
-
-Велкам нові модулі, фічі, переклади!
-
-## 📜 Ліцензія
-
-MIT License
-
----
-
-Built in a few hours on January 1, 2026 with the help of AI assistants 🚀
-## ☕ Support the project / Підтримати проєкт
-
-Якщо RFID OS допомагає тобі — купи мені каву! ☕❤️  
-Це мотивує розвивати проєкт далі.
-
-If RFID OS helps you — buy me a coffee! ☕❤️  
-It keeps me motivated to improve the project.
-
-[![Support on Ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-ff5f5f?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/yurakas)
-
-Дякую за підтримку! / Thanks for the support!
+### ☕ Підтримка
+Якщо RFID OS корисний — кава завжди вітається ☕  
+👉 [![Support on Ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-ff5f5f?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/yurakas)
