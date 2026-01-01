@@ -58,6 +58,6 @@ Built in a few hours on January 1, 2026 with the help of AI assistants 🚀
 If RFID OS helps you — buy me a coffee! ☕❤️  
 It keeps me motivated to improve the project.
 
-[![Ko-fi](https://ko-fi.com/img/githubbtn_sm.svg)](https://ko-fi.com/yurakas)
+[![Support on Ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-ff5f5f?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/yurakas)
 
 Дякую за підтримку! / Thanks for the support!
