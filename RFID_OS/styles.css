@@ -172,6 +172,79 @@ header {
     flex-wrap: wrap;
 }
 
+/* Smart Export Selector */
+.export-format-selector {
+    display: none;
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    animation: slideDown 0.3s ease;
+}
+
+.export-format-selector.show {
+    display: block;
+}
+
+.export-format-selector .selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.export-format-selector .selector-title {
+    font-size: 1.1em;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.export-format-selector .selector-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.format-description {
+    color: var(--gray);
+    font-size: 0.9em;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+/* Smart Export иконки */
+.format-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.export-format-selector .filter-select option {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.export-format-selector .filter-select option::before {
+    content: attr(data-icon);
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/* Динамические кнопки */
+.selector-controls .btn-export {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.selector-controls .btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
 /* Grid and Cards */
 .grid { 
     display: grid; 
@@ -294,6 +367,73 @@ header {
     gap: 10px;
     margin-top: auto;
     flex-wrap: wrap;
+}
+
+/* LLM Profile Controls */
+.llm-profile-section {
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.llm-profile-title {
+    font-size: 1.1em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.temperature-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.temperature-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.temperature-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+}
+
+.temperature-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+}
+
+.temperature-value {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 40px;
+}
+
+.llm-variant-hint {
+    font-size: 0.85em;
+    color: var(--gray);
+    margin-top: 5px;
 }
 
 /* Modal Styles */
@@ -431,6 +571,32 @@ textarea {
     padding: 2px 6px;
     border-radius: 4px;
     font-family: monospace;
+}
+
+/* Export Preview Modal */
+#exportPreviewContent {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.export-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
 }
 
 .history-section {
@@ -606,6 +772,8 @@ textarea {
     .card-actions { flex-direction: column; }
     .filters { flex-direction: column; }
     .filter-select { min-width: auto; width: 100%; }
+    .export-format-selector .selector-controls { flex-direction: column; }
+    .temperature-control { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
 
 @media (max-width: 1200px) {

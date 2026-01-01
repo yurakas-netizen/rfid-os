@@ -78,7 +78,33 @@
             <button class="btn-sm" id="clearSelectionBtn">✖️ Скасувати вибір</button>
         </div>
     </div>
-
+	    <!-- Smart Export Selector -->
+    <div class="export-format-selector" id="exportFormatSelector">
+        <div class="selector-header">
+            <div class="selector-title">📤 Smart Export</div>
+            <button class="btn-sm" onclick="hideExportSelector()">✖️ Скрыть</button>
+        </div>
+        <div class="selector-controls">
+            <select class="filter-select" id="exportFormatSelect">
+                <option value="chatgpt">🤖 ChatGPT</option>
+                <option value="claude">👨‍💼 Claude</option>
+                <option value="gemini">🔷 Gemini</option>
+                <option value="deepseek">🧠 DeepSeek</option>
+                <option value="copilot">👨‍💻 Copilot</option>
+                <option value="grok">😎 Grok</option>
+                <option value="llama">🦙 Llama</option>
+                <option value="mistral">🌬️ Mistral</option>
+                <option value="perplexity">🔍 Perplexity</option>
+                <option value="jsonl">📊 JSONL для обучения</option>
+                <option value="universal">📄 Универсальный Markdown</option>
+            </select>
+            <button class="btn-sm" onclick="previewExport()">👁️ Предпросмотр</button>
+            <button class="btn-sm btn-export" onclick="executeExport()">📤 Экспорт</button>
+        </div>
+        <div class="format-description" id="exportFormatDescription">
+            Экспорт выбранных модулей в выбранном формате
+        </div>
+    </div>
     <div class="grid" id="moduleGrid">
         <!-- Cards will be rendered here -->
     </div>
@@ -146,7 +172,46 @@
                 <input type="text" id="tags" placeholder="Введіть теги через кому">
                 <small class="text-muted">Наприклад: ТЗ, архітектура, система</small>
             </div>
-            
+                        <!-- LLM Profile Section -->
+            <div class="llm-profile-section">
+                <div class="llm-profile-title">🧠 Настройки LLM</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="llmFamily">Сімейство LLM</label>
+                        <select id="llmFamily">
+                            <option value="">Не вказано</option>
+                            <option value="chatgpt">🤖 ChatGPT</option>
+                            <option value="claude">👨‍💼 Claude</option>
+                            <option value="gemini">🔷 Gemini</option>
+                            <option value="deepseek">🧠 DeepSeek</option>
+                            <option value="copilot">👨‍💻 Copilot</option>
+                            <option value="grok">😎 Grok</option>
+                            <option value="llama">🦙 Llama</option>
+                            <option value="mistral">🌬️ Mistral</option>
+                            <option value="perplexity">🔍 Perplexity</option>
+                            <option value="custom">🔧 Custom</option>
+                            <option value="universal">🌐 Universal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="llmTemperature">Температура</label>
+                        <div class="temperature-control">
+                            <input type="range" id="llmTemperature" class="temperature-slider" 
+                                   min="0" max="2" step="0.1" value="0.7">
+                            <span class="temperature-value" id="llmTemperatureValue">0.7</span>
+                        </div>
+                        <small class="llm-variant-hint">Від 0 (точніше) до 2 (креативніше)</small>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="customVariantSection" style="display: none;">
+                    <label class="form-label" for="llmVariant">Варіант моделі</label>
+                    <input type="text" id="llmVariant" placeholder="Наприклад: gpt-4-turbo, claude-3-sonnet">
+                    <small class="llm-variant-hint">Вкажіть конкретну версію моделі для Custom</small>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="form-label" for="content">Контент (промпт/код) *</label>
                 <textarea id="content" rows="10" placeholder="Вставте текст промпту, код або інший контент тут..." required></textarea>
@@ -192,7 +257,28 @@
         </div>
     </div>
 </div>
-
+<!-- Export Preview Modal -->
+<div class="modal" id="exportPreviewModal">
+    <div class="modal-content" style="max-width: 900px;">
+        <div class="modal-header">
+            <h2 class="modal-title" id="exportPreviewTitle">Предпросмотр экспорта</h2>
+            <button class="close-modal" onclick="closeExportPreview()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="export-info">
+                <div><strong>Формат:</strong> <span id="previewFormatName"></span></div>
+                <div><strong>Модулей:</strong> <span id="previewModuleCount"></span></div>
+                <div><strong>Размер:</strong> <span id="previewSize"></span> KB</div>
+            </div>
+            <pre id="exportPreviewContent"></pre>
+        </div>
+        <div class="modal-actions">
+            <button class="btn" onclick="downloadExport()">📥 Скачать файл</button>
+            <button class="btn-sm" onclick="copyExportPreview()">📋 Копировать</button>
+            <button class="btn-sm" onclick="closeExportPreview()">Закрыть</button>
+        </div>
+    </div>
+</div>
 <!-- Toast Notification -->
 <div class="toast" id="toast"></div>
 
@@ -201,11 +287,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
-
+<script src="scripts/export-llm.js"></script>
+<script src="scripts/llm-profile.js"></script>
 <!-- Наши скрипты -->
 <script src="scripts/storage.js"></script>
 <script src="scripts/markdown.js"></script>
 <script src="scripts/tags.js"></script>
+<script src="scripts/export-llm.js"></script>
+<script src="scripts/llm-profile.js"></script>
 <script src="scripts/app.js"></script>
 
 </body>

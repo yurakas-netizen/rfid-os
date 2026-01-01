@@ -72,6 +72,10 @@ function renderModules() {
         
         const isSelected = selectedModules.has(m.id);
         
+        // LLM Profile icon
+        const llmIcon = m.llmProfile ? getLLMProfileIcon(m.llmProfile.family) : '🤖';
+        const llmTitle = m.llmProfile ? getLLMProfileTitle(m.llmProfile.family) : 'LLM';
+        
         const card = document.createElement('div');
         card.className = `card ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
@@ -87,6 +91,11 @@ function renderModules() {
                         <span class="badge badge-category">${escapeHTML(m.category)}</span>
                         <span class="badge ${statusClass}">${statusText}</span>
                         <span class="version">v${escapeHTML(m.version)}</span>
+                        ${m.llmProfile ? `
+                            <span class="badge" style="background: rgba(56, 189, 248, 0.1); color: var(--accent);">
+                                ${llmIcon} ${escapeHTML(llmTitle)}
+                            </span>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -120,6 +129,42 @@ function renderModules() {
     });
 }
 
+// Get LLM Profile icon
+function getLLMProfileIcon(family) {
+    const icons = {
+        'chatgpt': '🤖',
+        'claude': '👨‍💼',
+        'gemini': '🔷',
+        'deepseek': '🧠',
+        'copilot': '👨‍💻',
+        'grok': '😎',
+        'llama': '🦙',
+        'mistral': '🌬️',
+        'perplexity': '🔍',
+        'custom': '🔧',
+        'universal': '🌐'
+    };
+    return icons[family] || '🤖';
+}
+
+// Get LLM Profile title
+function getLLMProfileTitle(family) {
+    const titles = {
+        'chatgpt': 'ChatGPT',
+        'claude': 'Claude',
+        'gemini': 'Gemini',
+        'deepseek': 'DeepSeek',
+        'copilot': 'Copilot',
+        'grok': 'Grok',
+        'llama': 'Llama',
+        'mistral': 'Mistral',
+        'perplexity': 'Perplexity',
+        'custom': 'Custom',
+        'universal': 'Universal'
+    };
+    return titles[family] || 'LLM';
+}
+
 // Modal functions
 function openModal(type = 'create', moduleId = null) {
     if (type === 'create') {
@@ -130,6 +175,11 @@ function openModal(type = 'create', moduleId = null) {
         document.getElementById('status').value = 'active';
         document.getElementById('version').value = '1.0.0';
         document.getElementById('icon').value = '📄';
+        document.getElementById('llmFamily').value = '';
+        document.getElementById('llmVariant').value = '';
+        document.getElementById('llmTemperature').value = '0.7';
+        document.getElementById('llmTemperatureValue').textContent = '0.7';
+        document.getElementById('customVariantSection').style.display = 'none';
     } else if (type === 'edit' && moduleId) {
         const module = modules.find(m => m.id == moduleId);
         if (module) {
@@ -146,6 +196,24 @@ function openModal(type = 'create', moduleId = null) {
             document.getElementById('content').value = module.content;
             document.getElementById('filePath').value = module.filePath || '';
             document.getElementById('filePathInput').value = module.filePath || '';
+            
+            // LLM Profile fields
+            if (module.llmProfile) {
+                document.getElementById('llmFamily').value = module.llmProfile.family || '';
+                document.getElementById('llmVariant').value = module.llmProfile.variant || '';
+                document.getElementById('llmTemperature').value = module.llmProfile.temperature || '0.7';
+                document.getElementById('llmTemperatureValue').textContent = module.llmProfile.temperature || '0.7';
+                
+                if (module.llmProfile.family === 'custom') {
+                    document.getElementById('customVariantSection').style.display = 'block';
+                }
+            } else {
+                document.getElementById('llmFamily').value = '';
+                document.getElementById('llmVariant').value = '';
+                document.getElementById('llmTemperature').value = '0.7';
+                document.getElementById('llmTemperatureValue').textContent = '0.7';
+                document.getElementById('customVariantSection').style.display = 'none';
+            }
         }
     }
     
@@ -158,6 +226,19 @@ function closeModuleModal() {
 
 function closeViewModal() {
     document.getElementById('viewModal').classList.remove('active');
+}
+
+// Update temperature value display
+function updateTemperatureValue() {
+    const temp = document.getElementById('llmTemperature').value;
+    document.getElementById('llmTemperatureValue').textContent = temp;
+}
+
+// Toggle custom variant field
+function toggleCustomVariant() {
+    const family = document.getElementById('llmFamily').value;
+    const customSection = document.getElementById('customVariantSection');
+    customSection.style.display = family === 'custom' ? 'block' : 'none';
 }
 
 // Generate file path
@@ -207,6 +288,14 @@ function handleFormSubmit(e) {
     const id = document.getElementById('moduleId').value;
     const now = new Date().toISOString();
     
+    // Collect LLM Profile data
+    const llmFamily = document.getElementById('llmFamily').value;
+    const llmProfile = llmFamily ? {
+        family: llmFamily,
+        variant: document.getElementById('llmVariant').value.trim(),
+        temperature: parseFloat(document.getElementById('llmTemperature').value) || 0.7
+    } : null;
+    
     const moduleData = {
         id: id ? parseInt(id) : Date.now(),
         name: document.getElementById('name').value.trim(),
@@ -220,6 +309,11 @@ function handleFormSubmit(e) {
         filePath: document.getElementById('filePath').value || `modules/module-${Date.now()}.json`,
         updatedAt: now
     };
+    
+    // Add LLM Profile if provided
+    if (llmProfile) {
+        moduleData.llmProfile = llmProfile;
+    }
     
     // Find existing module
     const existingIndex = modules.findIndex(m => m.id == id);
@@ -258,6 +352,92 @@ function handleFormSubmit(e) {
     updateTagList();
     renderModules();
     closeModuleModal();
+}
+
+// Smart Export functions
+let currentExportData = null;
+
+function showExportSelector() {
+    document.getElementById('exportFormatSelector').classList.add('show');
+}
+
+function hideExportSelector() {
+    document.getElementById('exportFormatSelector').classList.remove('show');
+}
+
+function previewExport() {
+    const format = document.getElementById('exportFormatSelect').value;
+    const modulesToExport = selectedModules.size > 0 
+        ? modules.filter(m => selectedModules.has(m.id))
+        : modules;
+    
+    if (modulesToExport.length === 0) {
+        showToast('Нет модулей для экспорта', 'warning');
+        return;
+    }
+    
+    const preview = LLMExporter.createPreview(modulesToExport, format);
+    if (!preview) {
+        showToast('Ошибка создания предпросмотра', 'error');
+        return;
+    }
+    
+    currentExportData = {
+        content: preview.content,
+        format: format,
+        modules: modulesToExport
+    };
+    
+    document.getElementById('exportPreviewTitle').textContent = `Предпросмотр: ${preview.formatName}`;
+    document.getElementById('previewFormatName').textContent = preview.formatName;
+    document.getElementById('previewModuleCount').textContent = preview.moduleCount;
+    document.getElementById('previewSize').textContent = preview.sizeKB;
+    document.getElementById('exportPreviewContent').textContent = preview.content;
+    
+    document.getElementById('exportPreviewModal').classList.add('active');
+}
+
+function closeExportPreview() {
+    document.getElementById('exportPreviewModal').classList.remove('active');
+}
+
+function downloadExport() {
+    if (!currentExportData) return;
+    
+    const format = currentExportData.format;
+    const formatConfig = LLMExporter.formats[format];
+    const filename = `rfid-os-export-${format}-${Date.now()}${formatConfig.extension}`;
+    
+    LLMExporter.download(currentExportData.content, filename);
+    showToast(`Экспортировано ${currentExportData.modules.length} модулей в ${formatConfig.name}`, 'success');
+    closeExportPreview();
+}
+
+function copyExportPreview() {
+    if (!currentExportData) return;
+    
+    navigator.clipboard.writeText(currentExportData.content)
+        .then(() => showToast('Скопировано в буфер обмена', 'success'))
+        .catch(err => showToast('Ошибка копирования: ' + err, 'error'));
+}
+
+function executeExport() {
+    const format = document.getElementById('exportFormatSelect').value;
+    const modulesToExport = selectedModules.size > 0 
+        ? modules.filter(m => selectedModules.has(m.id))
+        : modules;
+    
+    if (modulesToExport.length === 0) {
+        showToast('Нет модулей для экспорта', 'warning');
+        return;
+    }
+    
+    const formatConfig = LLMExporter.formats[format];
+    const content = formatConfig.export(modulesToExport);
+    const filename = `rfid-os-export-${format}-${Date.now()}${formatConfig.extension}`;
+    
+    LLMExporter.download(content, filename);
+    showToast(`Экспортировано ${modulesToExport.length} модулей`, 'success');
 }
 
 // Bulk operations
@@ -305,24 +485,7 @@ function bulkExport() {
         return;
     }
     
-    const selectedModulesData = modules.filter(m => selectedModules.has(m.id));
-    const exportData = {
-        version: '1.0',
-        exportedAt: new Date().toISOString(),
-        modules: selectedModulesData
-    };
-    
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `rfid-modules-selected-${Date.now()}.json`;
-    a.click();
-    
-    URL.revokeObjectURL(url);
-    showToast(`Експортовано ${selectedModules.size} модулів`, 'success');
+    showExportSelector();
 }
 
 function bulkArchive() {
@@ -402,6 +565,29 @@ function setupEventListeners() {
     document.getElementById('generateFilePathBtn').addEventListener('click', generateFilePath);
     document.getElementById('moduleForm').addEventListener('submit', handleFormSubmit);
     
+    // LLM Profile form controls
+    document.getElementById('llmTemperature').addEventListener('input', updateTemperatureValue);
+    document.getElementById('llmFamily').addEventListener('change', toggleCustomVariant);
+    
+    // Smart Export
+    document.getElementById('exportFormatSelect').addEventListener('change', function() {
+        const format = this.value;
+        const description = LLMExporter.formats[format]?.description || '';
+        document.getElementById('exportFormatDescription').textContent = description;
+        
+        // Динамически меняем иконку в кнопке экспорта
+        const exportBtn = document.querySelector('.selector-controls .btn-export');
+        const icon = LLMExporter.getFormatIcon(format);
+        if (exportBtn) {
+            exportBtn.innerHTML = `${icon} Экспорт в ${LLMExporter.formats[format]?.name || format}`;
+        }
+    });
+    
+    // Initialize export description
+    const initialFormat = document.getElementById('exportFormatSelect').value;
+    document.getElementById('exportFormatDescription').textContent = 
+        LLMExporter.formats[initialFormat]?.description || '';
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         // Ctrl/Cmd + N for new module
@@ -414,12 +600,19 @@ function setupEventListeners() {
         if (e.key === 'Escape') {
             closeModuleModal();
             closeViewModal();
+            closeExportPreview();
         }
         
         // Ctrl/Cmd + F to focus search
         if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
             e.preventDefault();
             document.getElementById('search').focus();
+        }
+        
+        // Ctrl/Cmd + E for export
+        if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+            e.preventDefault();
+            showExportSelector();
         }
     });
 }
